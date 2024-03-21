@@ -1,10 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { WebsocketContext } from "../contexts/WebSocketContext";
+import "./Websocket.css"; // Import the CSS file for styling
+import { FaPaperPlane } from "react-icons/fa"; // Import an icon from react-icons
 
 type MessagePayload = {
   content: string;
   msg: string;
 };
+
 export const Websocket = () => {
   const [value, setValue] = useState("");
   const [messages, setMessages] = useState<MessagePayload[]>([]);
@@ -21,39 +24,46 @@ export const Websocket = () => {
     });
     return () => {
       console.log("Unregistering Events...");
-      socket.off("connect"); // Remove existing listeners to avoid duplicate event handling
+      socket.off("connect");
       socket.off("onMessage");
     };
-  }, []);
+  }, [socket]);
+
   const onSubmit = () => {
     socket.emit("newMessage", value);
     setValue("");
   };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      onSubmit();
+    }
+  };
+
   return (
-    <div>
-      <div>
-        <h1>Websocket Compoment</h1>
-        <div>
-          {messages.length === 0 ? (
-            <div>No Messages!</div>
-          ) : (
-            <div>
-              {messages.map((msg) => (
-                <div>
-                  <p>{msg.content}</p>
-                </div>
-              ))}
+    <div className="websocket-container">
+      <div className="chat-window">
+        <div className="chat-header">Web Chat 💬</div>
+        <div className="chat-body">
+          {messages.map((msg, index) => (
+            <div key={index} className="message">
+              <p>{msg.content}</p>
             </div>
-          )}
+          ))}
         </div>
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => {
-            setValue(e.target.value);
-          }}
-        />
-        <button onClick={onSubmit}>Submit</button>
+        <div className="chat-footer">
+          <input
+            type="text"
+            placeholder="Type a message..."
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            onKeyPress={handleKeyPress}
+            className="message-input"
+          />
+          <button onClick={onSubmit} className="send-button">
+            <FaPaperPlane />
+          </button>
+        </div>
       </div>
     </div>
   );
