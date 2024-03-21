@@ -25,16 +25,20 @@
 .chat-body {
   height: 300px;
   overflow-y: auto;
-  padding: 10px;
+  padding: 10px 20px;
   background-color: #1a1a1a; /* Dark theme for the chat body */
 }
 
 .message {
-  padding: 5px 10px;
-  margin-bottom: 10px;
+  padding: 8px 16px;
+  margin: 10px 0;
   color: white;
   background-color: #333;
-  border-radius: 4px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  width: calc(100% - 32px);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .chat-footer {
@@ -67,4 +71,20 @@
 
 .send-button svg {
   font-size: 18px; /* Size of the paper plane icon */
+}
+
+/* Total scrollbar styling */
+::-webkit-scrollbar {
+  width: 12px; /* Adjust width for scrollbar */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; /* Handle color */
+  border-radius: 6px; /* Rounded corners for handle */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Handle hover color */
 }
