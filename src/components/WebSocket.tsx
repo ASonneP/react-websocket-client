@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { WebsocketContext } from "../contexts/WebSocketContext";
 import "./Websocket.css"; // Import the CSS file for styling
 import { FaPaperPlane } from "react-icons/fa"; // Import an icon from react-icons
@@ -12,6 +12,8 @@ export const Websocket = () => {
   const [value, setValue] = useState("");
   const [messages, setMessages] = useState<MessagePayload[]>([]);
   const socket = useContext(WebsocketContext);
+
+  const endOfMessagesRef = useRef<null | HTMLDivElement>(null); // Reference for the last message
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -34,6 +36,13 @@ export const Websocket = () => {
     setValue("");
   };
 
+  useEffect(() => {
+    // This will run whenever the 'messages' state changes.
+    if (endOfMessagesRef.current) {
+      endOfMessagesRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       onSubmit();
@@ -50,6 +59,7 @@ export const Websocket = () => {
               <p>{msg.content}</p>
             </div>
           ))}
+          <div ref={endOfMessagesRef} />
         </div>
         <div className="chat-footer">
           <input
