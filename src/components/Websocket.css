@@ -88,3 +88,21 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #555; /* Handle hover color */
 }
+
+.chat-header {
+  display: flex; /* Use flexbox to make children inline */
+  align-items: center; /* Align items vertically */
+}
+
+.online-users {
+  display: flex; /* Use flexbox to make children inline */
+  align-items: center; /* Align items vertically */
+}
+
+.online-users span {
+  margin-left: 5px;
+}
+
+.web-chat {
+  margin-left: auto; /* Push the "Web Chat 💬" text to the right */
+}

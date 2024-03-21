@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState, useRef } from "react";
 import { WebsocketContext } from "../contexts/WebSocketContext";
 import "./Websocket.css"; // Import the CSS file for styling
-import { FaPaperPlane } from "react-icons/fa"; // Import an icon from react-icons
+import { FaPaperPlane, FaUserFriends } from "react-icons/fa"; // Import an icon from react-icons
 
 type MessagePayload = {
   content: string;
@@ -11,6 +11,7 @@ type MessagePayload = {
 export const Websocket = () => {
   const [value, setValue] = useState("");
   const [messages, setMessages] = useState<MessagePayload[]>([]);
+  const [onlineUsers, setOnlineUsers] = useState<number>(0); // State to track online users
   const socket = useContext(WebsocketContext);
 
   const endOfMessagesRef = useRef<null | HTMLDivElement>(null); // Reference for the last message
@@ -23,6 +24,9 @@ export const Websocket = () => {
       console.log("onMessage event received");
       console.log(newMessage);
       setMessages((prev) => [...prev, newMessage]);
+    });
+    socket.on("userCount", (count: number) => {
+      setOnlineUsers(count); // Update online user count
     });
     return () => {
       console.log("Unregistering Events...");
@@ -52,7 +56,12 @@ export const Websocket = () => {
   return (
     <div className="websocket-container">
       <div className="chat-window">
-        <div className="chat-header">Web Chat 💬</div>
+        <div className="chat-header">
+          <div className="online-users">
+            <FaUserFriends /> <span>{onlineUsers}</span>
+          </div>
+          <div className="web-chat">Web Chat 💬</div>
+        </div>
         <div className="chat-body">
           {messages.map((msg, index) => (
             <div key={index} className="message">
